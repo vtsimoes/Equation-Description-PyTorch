@@ -3,12 +3,13 @@ import pickle
 import numpy
 from collections import Counter
 import sys
-sys.path.append('/home/ajoy.mondal/coco/PythonAPI')
-from pycocotools.coco import COCO
-
+import json
+#sys.path.append('../cocoapi/PythonAPI')
+#from pycocotools.coco import COCO
+nltk.download('punkt')
 args={
-    'caption_path':'/ssd_scratch/cvit/ajoy/data/annotations/captions_train.json',                #path for train annotation file
-    'vocab_path':'/ssd_scratch/cvit/ajoy/data/vocab.pkl',                                            #path for saving vocabulary wrapper
+    'caption_path':'../json_captions/json_captions.json',                #path for train annotation file
+    'vocab_path':'../data/vocab.pkl',                                            #path for saving vocabulary wrapper
     'threshold': 4                                                                                            #minimum word count threshold
 }
 
@@ -33,13 +34,17 @@ class Vocabulary(object):
     def __len__(self):
         return len(self.word2idx)
 
-def build_vocab(json, threshold):
+def build_vocab(json_file, threshold):
     """Build a simple vocabulary wrapper."""
-    coco = COCO(json)
+    #coco = COCO(json)
     counter = Counter()
-    ids = coco.anns.keys()
+    f = open(json_file)
+    data = json.load(f)
+    #print(type(data["captions"]))
+    print(data.keys())
+    ids = data['captions'].keys()
     for i, id in enumerate(ids):
-        caption = str(coco.anns[id]['caption'])
+        caption = str(data['captions'][id])
         tokens = nltk.tokenize.word_tokenize(caption.lower())
         counter.update(tokens)
 
@@ -62,8 +67,9 @@ def build_vocab(json, threshold):
     return vocab
 
 def main():
-    vocab = build_vocab(json=args['caption_path'],
+    vocab = build_vocab(json_file=args['caption_path'],
                         threshold=args['threshold'])
+    print(vocab)
     vocab_path = args['vocab_path']
     with open(vocab_path, 'wb') as f:
         pickle.dump(vocab, f)

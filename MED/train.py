@@ -20,11 +20,11 @@ plt.switch_backend('agg')
 import matplotlib.ticker as ticker
 
 args = {
-    'model_path': '/ssd_scratch/cvit/ajoy/data/ResNet50_finetune_attention_lstm_node08/',    #path for saving trained models # actual model is saved in modles but for testing purpose models1
+    'model_path': '../data/ResNet50_finetune_attention_lstm_node08/',    #path for saving trained models # actual model is saved in modles but for testing purpose models1
     'crop_size':  224,                                                                 #size for randomly cropping images
-    'vocab_path': '/ssd_scratch/cvit/ajoy/data/vocab.pkl',                             #path for vocabulary wrapper
-    'image_dir': '/ssd_scratch/cvit/ajoy/data/resize_training_equation_images/',                       #directory for resized images
-    'caption_path': '/ssd_scratch/cvit/ajoy/data/annotations/captions_train.json', #path for train annotation json file
+    'vocab_path': '../data/vocab.pkl',                             #path for vocabulary wrapper
+    'image_dir': '../resize_training_equation_images/',                       #directory for resized images
+    'caption_path': '../json_captions/json_captions.json', #path for train annotation json file
     'log_step': 10000,                                                                   #step size for prining log info
     'save_step': 10000,                                                                 #step size for saving trained models
     # Model parameters 

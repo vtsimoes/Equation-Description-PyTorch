@@ -6,13 +6,14 @@ import pickle
 import numpy as np
 import nltk
 from PIL import Image
+import json
 from build_vocab import Vocabulary
-from pycocotools.coco import COCO
+#from pycocotools.coco import COCO
 
 
 class CocoDataset(data.Dataset):
     """COCO Custom Dataset compatible with torch.utils.data.DataLoader."""
-    def __init__(self, root, json, vocab, transform=None):
+    def __init__(self, root, json_file, vocab, transform=None):
         """Set the path for images, captions and vocabulary wrapper.
         
         Args:
@@ -22,20 +23,22 @@ class CocoDataset(data.Dataset):
             transform: image transformer.
         """
         self.root = root
-        self.coco = COCO(json)
-        self.ids = list(self.coco.anns.keys())
+        #self.coco = COCO(json)
+        f = open(json_file)
+        self.data = json.load(f)
+        self.ids = list(self.data["captions"].keys())
         self.vocab = vocab
         self.transform = transform
 
     def __getitem__(self, index):
         """Returns one data pair (image and caption)."""
-        coco = self.coco
+        data = self.data
         vocab = self.vocab
         ann_id = self.ids[index]
-        caption = coco.anns[ann_id]['caption']
-        img_id = coco.anns[ann_id]['image_id']
-        path = coco.loadImgs(img_id)[0]['file_name'] #when use coco dataset
-        #path = img_id+'.jpg' # when trained with equation data set
+        caption = data['captions'][ann_id]
+        img_id = data['image_file'][ann_id]
+        #path = coco.loadImgs(img_id)[0]['file_name'] #when use coco dataset
+        path = img_id+'.png' # when trained with equation data set
         image = Image.open(os.path.join(self.root, path)).convert('RGB')
         if self.transform is not None:
             image = self.transform(image)
@@ -85,11 +88,11 @@ def collate_fn(data):
     return images, targets, lengths
 
 
-def get_loader(root, json, vocab, transform, batch_size, shuffle, num_workers):
+def get_loader(root, json_file, vocab, transform, batch_size, shuffle, num_workers):
     """Returns torch.utils.data.DataLoader for custom coco dataset."""
     # COCO caption dataset
     coco = CocoDataset(root=root,
-                       json=json,
+                       json_file=json_file,
                        vocab=vocab,
                        transform=transform)
     
