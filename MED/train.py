@@ -33,7 +33,7 @@ args = {
     'embed_size': 256,                                 #dimension of word embedding vectors 256 // 512 and 1024 // 512 and 512 // 256 and 512
     'hidden_size':512,                                #dimension of lstm hidden states 512
     'num_layers': 1,                                   #number of layers in lstm 1
-    'num_epochs': 1,                                  #no of epoch for learning #best parameter 30
+    'num_epochs': 3,                                  #no of epoch for learning #best parameter 30
     'batch_size': 10,                                  #no of batches 128
     'num_workers': 1,                                 #no of worker  2            
     'learning_rate': 0.0001                             #learning rate for training 0.001

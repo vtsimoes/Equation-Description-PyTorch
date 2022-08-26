@@ -27,7 +27,7 @@ class EncoderCNN(nn.Module):
         self.linear = nn.Linear(resnet.fc.in_features, embed_size)
         self.bn = nn.BatchNorm1d(embed_size, momentum=0.5)
         self.ReLU = nn.ReLU(inplace=True)
-	self.Dropout= nn.Dropout(0.5) #extra term   
+        self.Dropout= nn.Dropout(0.5) #extra term   
         self.init_weights()
         
     def init_weights(self):
@@ -72,7 +72,10 @@ class DecoderRNN(nn.Module):
         """Decode image feature vectors and generates captions."""
         embeddings = self.embed(captions)
         embeddings = torch.cat((features.unsqueeze(1), embeddings), 1)
-        packed, batch_sizes = pack_padded_sequence(embeddings, lengths, batch_first=True)
+        #packed, batch_sizes = pack_padded_sequence(embeddings, lengths, batch_first=True)
+        packed_data = pack_padded_sequence(embeddings, lengths, batch_first=True)
+        packed = packed_data.data
+        batch_sizes = packed_data.batch_sizes
         #print(batch_sizes)
         
         hiddenStates = None
