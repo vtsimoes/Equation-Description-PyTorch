@@ -38,7 +38,8 @@ class CocoDataset(data.Dataset):
         caption = data['captions'][ann_id]
         img_id = data['image_file'][ann_id]
         #path = coco.loadImgs(img_id)[0]['file_name'] #when use coco dataset
-        path = img_id+'.png' # when trained with equation data set
+        #path = img_id+'.png' # when trained with equation data set
+        path = img_id
         image = Image.open(os.path.join(self.root, path)).convert('RGB')
         if self.transform is not None:
             image = self.transform(image)
